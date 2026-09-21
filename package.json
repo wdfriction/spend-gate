@@ -1,15 +1,31 @@
 {
   "name": "spend-gate",
   "version": "0.1.0",
-  "description": "Buyer-side spend decision gate for agentic x402 payments (Jev-backed).",
+  "description": "Buyer-side spend decision gate for agentic x402 payments — pay | skip | escalate before signing.",
   "type": "module",
   "license": "MIT",
   "author": "472hico",
+  "homepage": "https://github.com/472hico/spend-gate#readme",
+  "bugs": {
+    "url": "https://github.com/472hico/spend-gate/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/472hico/spend-gate.git"
   },
+  "keywords": [
+    "x402",
+    "ai-agents",
+    "micropayments",
+    "usdc",
+    "typesafe",
+    "jev",
+    "cloudflare-workers",
+    "hono",
+    "spend-control"
+  ],
   "scripts": {
+    "demo": "tsx scripts/demo.ts",
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
     "decide": "tsx src/cli.ts",
@@ -21,6 +37,14 @@
   "engines": {
     "node": ">=20"
   },
+  "files": [
+    "src",
+    "scripts",
+    "examples",
+    "LICENSE",
+    "README.md",
+    "README.ja.md"
+  ],
   "dependencies": {
     "@hono/node-server": "^1.14.4",
     "@typesafe-ai/sdk": "^0.6.0",

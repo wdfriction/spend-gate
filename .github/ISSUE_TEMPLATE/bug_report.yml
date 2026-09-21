@@ -1,0 +1,28 @@
+name: Bug report
+description: Something broken in spend-gate
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Expected vs actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Commands, request JSON (no secrets), environment.
+      value: |
+        ```bash
+        npm run decide -- examples/...
+        ```
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit / version
+      placeholder: main @ abc1234
