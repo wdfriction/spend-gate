@@ -72,6 +72,19 @@ Response (example):
 
 Over-budget requests set `ruled_out_by_code: true` and **do not** call TypeSafe.
 
+## Pricing (x402)
+
+`POST /v1/spend-decision` is gated by **x402**. Callers pay `GATE_PRICE_USD` (default **$0.001** USDC) to cover TypeSafe Jev cost plus a small margin. `GET /` and `GET /health` stay free.
+
+| Env | Meaning |
+|-----|---------|
+| `X402_PAY_TO` | Your `0x` wallet (secret on Workers) |
+| `X402_NETWORK` | `base` (mainnet) or `base-sepolia` (test) |
+| `GATE_PRICE_USD` | Per-decision price, e.g. `0.001` |
+| `X402_REQUIRED` | If `true` and pay-to missing → 503 |
+
+Without `X402_PAY_TO`, local Node stays free (`X402_REQUIRED=false`). Once pay-to is set, unpaid calls get HTTP 402.
+
 ## Deploy (Cloudflare Workers)
 
 No custom domain required. Uses `*.workers.dev`.
@@ -79,29 +92,28 @@ No custom domain required. Uses `*.workers.dev`.
 ```bash
 npm install
 npx wrangler login          # once, in the browser
-# Put the Gate TypeSafe key as a Worker secret (not in git):
 npx wrangler secret put TYPESAFE_API_KEY
+npx wrangler secret put X402_PAY_TO    # 0x… receiving address
 npm run deploy
 ```
 
-After deploy, open the printed URL (this project: `https://spend-gate.472hico.workers.dev`).
+Live: `https://spend-gate.472hico.workers.dev`
 
 ```bash
 curl -s https://spend-gate.472hico.workers.dev/health
-curl -s https://spend-gate.472hico.workers.dev/v1/spend-decision \
+# Unpaid decide → HTTP 402 with PAYMENT-REQUIRED (when X402_PAY_TO is set)
+curl -si https://spend-gate.472hico.workers.dev/v1/spend-decision \
   -H 'content-type: application/json' \
-  -d @examples/sample-request.json
+  -d @examples/sample-request.json | head
 ```
 
-**Cost note:** anyone who finds the URL can call the gate and spend **your** TypeSafe (Jev) quota. There is no auth on MVP. Add a shared secret later if abuse appears.
-
-Local Node (`npm start`) and Workers share the same API shape.
+**Note:** until `X402_PAY_TO` is set, the public Worker may still allow free decisions. Set the wallet secret to start charging.
 
 ## Secrets
 
-- Local: `TYPESAFE_API_KEY` in **`.env`** (gitignored).
-- Workers: `wrangler secret put TYPESAFE_API_KEY`.
-- Use a **separate** TypeSafe key for this project vs personal experiments.
+- Local: `.env` (gitignored).
+- Workers: `wrangler secret put …`.
+- Keep a **Gate-dedicated** TypeSafe key separate from personal demos.
 
 ## License
 
@@ -109,4 +121,4 @@ MIT — see [LICENSE](./LICENSE).
 
 ## Status
 
-MVP / early OSS. Wallet signing and settlement stay in your x402 client; this repo only decides whether to pay. Public Workers deploy is optional.
+MVP / early OSS. This service decides whether to pay **other** x402 resources; calling the gate itself can also require x402.

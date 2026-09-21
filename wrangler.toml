@@ -8,6 +8,14 @@ workers_dev = true
 TYPESAFE_MODEL = "jev-latest"
 TASK_FIT_THRESHOLD = "0.55"
 VALUE_THRESHOLD = "0.5"
+# Jev cost + margin per decision (USDC via x402)
+GATE_PRICE_USD = "0.001"
+# mainnet Base USDC so fees can offset real TypeSafe cost
+X402_NETWORK = "base"
+X402_FACILITATOR_URL = "https://x402.org/facilitator"
+# Refuse free calls when pay-to is missing. Set true after X402_PAY_TO is configured.
+X402_REQUIRED = "false"
 
-# Secret (set via: npx wrangler secret put TYPESAFE_API_KEY)
-# TYPESAFE_API_KEY
+# Secrets:
+#   npx wrangler secret put TYPESAFE_API_KEY
+#   npx wrangler secret put X402_PAY_TO
