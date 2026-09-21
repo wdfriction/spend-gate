@@ -1,0 +1,14 @@
+{
+  "task": {
+    "goal": "Get a one-shot order book snapshot to decide whether to trade",
+    "remaining_budget_usd": 1.0,
+    "max_per_call_usd": 0.2
+  },
+  "payment_required": {
+    "amount_usd": 0.05,
+    "network": "eip155:8453",
+    "asset": "USDC",
+    "description": "Order book snapshot API for pair XYZ",
+    "resource": "https://example.com/v1/book"
+  }
+}

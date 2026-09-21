@@ -1,0 +1,36 @@
+{
+  "name": "spend-gate",
+  "version": "0.1.0",
+  "description": "Buyer-side spend decision gate for agentic x402 payments (Jev-backed).",
+  "type": "module",
+  "license": "MIT",
+  "author": "472hico",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/472hico/spend-gate.git"
+  },
+  "bin": {
+    "spend-gate": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "decide": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.4",
+    "@typesafe-ai/sdk": "^0.6.0",
+    "dotenv": "^16.6.1",
+    "hono": "^4.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.32",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
