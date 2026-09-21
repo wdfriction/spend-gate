@@ -38,7 +38,22 @@ export async function decide(
   const ruled = applyHardRules(req);
   if (ruled) return ruled;
 
-  const apiKey = config.apiKey ?? process.env.TYPESAFE_API_KEY;
+  const model =
+    config.model ??
+    (typeof process !== "undefined" ? process.env.TYPESAFE_MODEL : undefined) ??
+    "jev-latest";
+  const taskFitThreshold =
+    config.taskFitThreshold ??
+    (typeof process !== "undefined"
+      ? envNumber("TASK_FIT_THRESHOLD", 0.55)
+      : 0.55);
+  const valueThreshold =
+    config.valueThreshold ??
+    (typeof process !== "undefined" ? envNumber("VALUE_THRESHOLD", 0.5) : 0.5);
+
+  const apiKey =
+    config.apiKey ??
+    (typeof process !== "undefined" ? process.env.TYPESAFE_API_KEY : undefined);
   if (!apiKey) {
     return {
       decision: "escalate",
@@ -51,12 +66,6 @@ export async function decide(
         "TYPESAFE_API_KEY is not set. Copy .env.example to .env and add a Gate-dedicated key.",
     };
   }
-
-  const model = config.model ?? process.env.TYPESAFE_MODEL ?? "jev-latest";
-  const taskFitThreshold =
-    config.taskFitThreshold ?? envNumber("TASK_FIT_THRESHOLD", 0.55);
-  const valueThreshold =
-    config.valueThreshold ?? envNumber("VALUE_THRESHOLD", 0.5);
 
   const options = req.options ?? [];
   const client = new TypeSafeClient({ apiKey });

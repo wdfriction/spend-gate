@@ -1,0 +1,13 @@
+name = "spend-gate"
+main = "src/worker.ts"
+compatibility_date = "2026-05-02"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[vars]
+TYPESAFE_MODEL = "jev-latest"
+TASK_FIT_THRESHOLD = "0.55"
+VALUE_THRESHOLD = "0.5"
+
+# Secret (set via: npx wrangler secret put TYPESAFE_API_KEY)
+# TYPESAFE_API_KEY

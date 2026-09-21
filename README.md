@@ -72,11 +72,36 @@ Response (example):
 
 Over-budget requests set `ruled_out_by_code: true` and **do not** call TypeSafe.
 
+## Deploy (Cloudflare Workers)
+
+No custom domain required. Uses `*.workers.dev`.
+
+```bash
+npm install
+npx wrangler login          # once, in the browser
+# Put the Gate TypeSafe key as a Worker secret (not in git):
+npx wrangler secret put TYPESAFE_API_KEY
+npm run deploy
+```
+
+After deploy, open the printed URL (this project: `https://spend-gate.472hico.workers.dev`).
+
+```bash
+curl -s https://spend-gate.472hico.workers.dev/health
+curl -s https://spend-gate.472hico.workers.dev/v1/spend-decision \
+  -H 'content-type: application/json' \
+  -d @examples/sample-request.json
+```
+
+**Cost note:** anyone who finds the URL can call the gate and spend **your** TypeSafe (Jev) quota. There is no auth on MVP. Add a shared secret later if abuse appears.
+
+Local Node (`npm start`) and Workers share the same API shape.
+
 ## Secrets
 
-- Put `TYPESAFE_API_KEY` in **`.env`** (not in shell rc files for app secrets).
-- `.env` is gitignored. Commit only `.env.example`.
-- Use a **separate** TypeSafe key for this project vs personal experiments so demo usage cannot drain the gate.
+- Local: `TYPESAFE_API_KEY` in **`.env`** (gitignored).
+- Workers: `wrangler secret put TYPESAFE_API_KEY`.
+- Use a **separate** TypeSafe key for this project vs personal experiments.
 
 ## License
 
@@ -84,4 +109,4 @@ MIT — see [LICENSE](./LICENSE).
 
 ## Status
 
-MVP / early OSS. Wallet signing and settlement stay in your x402 client; this repo only decides whether to pay.
+MVP / early OSS. Wallet signing and settlement stay in your x402 client; this repo only decides whether to pay. Public Workers deploy is optional.
